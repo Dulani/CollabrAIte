@@ -74,7 +74,7 @@ export function DocumentList({
                     }}
                     title={doc.aiLocked ? "Unlock AI changes" : "Lock AI changes"}
                   >
-                    {doc.aiLocked ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
+                    {doc.aiLocked ? <Lock className="h-4 w-4 text-primary" /> : <Unlock className="h-4 w-4 hover:text-primary" />}
                   </Button>
               </SidebarMenuItem>
             ))}
