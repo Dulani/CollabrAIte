@@ -102,7 +102,6 @@ export const documents: Document[] = [
   },
 ];
 
-
 const doc1_v0 = documents.find(d => d.id === 'doc1')!.content;
 const doc1_v1 = doc1_v0.replace('The first stage', 'The initial phase');
 const doc1_v2_ai = doc1_v1.replace('share similarities', 'have resemblances');
@@ -111,6 +110,72 @@ const doc1_v3_bob = doc1_v1.replace('risk profile, societal impact, pace of deve
 const doc2_v0 = documents.find(d => d.id === 'doc2')!.content;
 const doc2_v1_charlie = doc2_v0.replace('examine', 'analyze');
 
-export const versions: Version[] = [];
+export const versions: Version[] = [
+  {
+    id: 'v1',
+    parentId: 'root',
+    documentId: 'doc1',
+    editor: users[0], // Alice
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 11.5).toISOString(),
+    contentBefore: doc1_v0,
+    contentAfter: doc1_v1,
+    summary: 'Rephrased the opening sentence.',
+  },
+  {
+    id: 'v2',
+    parentId: 'v1',
+    documentId: 'doc1',
+    editor: users[4], // AI
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 11).toISOString(),
+    contentBefore: doc1_v1,
+    contentAfter: doc1_v2_ai,
+    summary: 'AI suggestion to improve wording.',
+  },
+  {
+    id: 'v3',
+    parentId: 'v1',
+    documentId: 'doc1',
+    editor: users[1], // Bob
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString(),
+    contentBefore: doc1_v1,
+    contentAfter: doc1_v3_bob,
+    summary: 'Simplified the list of factors for brevity.',
+  },
+  {
+    id: 'v4',
+    parentId: 'root',
+    documentId: 'doc2',
+    editor: users[2], // Charlie
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 9).toISOString(),
+    contentBefore: doc2_v0,
+    contentAfter: doc2_v1_charlie,
+    summary: 'Changed "examine" to "analyze" for a more formal tone.',
+  },
+];
 
-export const tasks: Task[] = [];
+export const tasks: Task[] = [
+  {
+    id: 'task1',
+    documentId: 'doc1',
+    title: 'Review historical analogues',
+    assignee: users[1], // Bob
+    status: 'In Progress',
+    description: 'Check if the selected analogues are the most relevant ones.',
+  },
+  {
+    id: 'task2',
+    documentId: 'doc1',
+    title: 'Fact-check timelines',
+    assignee: users[2], // Charlie
+    status: 'To Do',
+    description: 'Verify the dates and timelines for the chosen analogues.',
+  },
+  {
+    id: 'task3',
+    documentId: 'doc3',
+    title: 'Finalize transferable principles',
+    assignee: users[0], // Alice
+    status: 'Done',
+    description: 'The principles have been extracted and are ready for review.',
+  },
+];

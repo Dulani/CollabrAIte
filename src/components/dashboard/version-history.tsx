@@ -1,7 +1,7 @@
+
 "use client";
 
-import React, from "react";
-import { versions as allVersions } from "@/lib/data";
+import React, { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,9 +12,50 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DiffView } from "./diff-view";
+import { db } from "@/lib/firebase";
+import { collection, query, where, onSnapshot, orderBy } from "firebase/firestore";
+import type { Version } from "@/lib/types";
+import { Skeleton } from "../ui/skeleton";
 
 export function VersionHistory({ documentId }: { documentId: string }) {
-  const versions = allVersions.filter((v) => v.documentId === documentId);
+  const [versions, setVersions] = useState<Version[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!documentId) return;
+    setLoading(true);
+    const q = query(
+      collection(db, "versions"),
+      where("documentId", "==", documentId),
+      orderBy("timestamp", "desc")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const versionsFromFirestore = snapshot.docs.map(doc => doc.data() as Version);
+      setVersions(versionsFromFirestore);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [documentId]);
+
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[...Array(3)].map((_, i) => (
+           <div key={i} className="flex items-start gap-4">
+              <Skeleton className="h-8 w-8 rounded-full" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-1/4" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+           </div>
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-4">

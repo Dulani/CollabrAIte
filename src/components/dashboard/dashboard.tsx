@@ -10,11 +10,11 @@ import {
 import { DocumentList } from "@/components/dashboard/document-list";
 import { DocumentEditor } from "@/components/dashboard/document-editor";
 import { DashboardHeader } from "@/components/dashboard/header";
-import type { Document } from "@/lib/types";
+import type { Document, Version, Task } from "@/lib/types";
 import { RightPanel } from "./right-panel";
 import { db } from "@/lib/firebase";
-import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
-import { documents as initialDocuments } from "@/lib/data";
+import { collection, onSnapshot, doc, updateDoc, writeBatch } from "firebase/firestore";
+import { documents as initialDocuments, versions as initialVersions, tasks as initialTasks } from "@/lib/data";
 
 
 export function Dashboard() {
@@ -22,19 +22,32 @@ export function Dashboard() {
   const [activeDocument, setActiveDocument] = useState<Document | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "documents"), (snapshot) => {
-      const docsFromFirestore = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Document));
+    const unsubscribe = onSnapshot(collection(db, "documents"), async (snapshot) => {
+      let docsFromFirestore = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Document));
       
       // A one-time operation to seed the database if it's empty
       if (docsFromFirestore.length === 0) {
         console.log("No documents found in Firestore, seeding with initial data...");
-        initialDocuments.forEach(async (d) => {
-          const { id, ...data } = d;
-          await db.collection('documents').doc(id).set(data);
+        const batch = writeBatch(db);
+
+        initialDocuments.forEach(d => {
+          const docRef = doc(db, "documents", d.id);
+          batch.set(docRef, d);
         });
-        setDocuments(initialDocuments);
-        setActiveDocument(initialDocuments[0]);
-        return;
+
+        initialVersions.forEach(v => {
+          const versionRef = doc(collection(db, "versions"));
+          batch.set(versionRef, { ...v, id: versionRef.id });
+        });
+
+        initialTasks.forEach(t => {
+            const taskRef = doc(collection(db, "tasks"));
+            batch.set(taskRef, { ...t, id: taskRef.id });
+        });
+
+        await batch.commit();
+
+        docsFromFirestore = initialDocuments;
       }
 
       setDocuments(docsFromFirestore);
