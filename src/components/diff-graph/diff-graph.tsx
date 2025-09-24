@@ -89,25 +89,25 @@ const buildTree = (versions: Version[]) => {
 
 const calculatePositions = (nodes: GraphNode[]) => {
   const positions = new Map<string, { x: number, y: number }>();
-  let y_offset = 0;
+  let x_offset = 0;
   
-  const traverse = (node: GraphNode, x_pos: number, y_base: number): number => {
-    let current_y = y_base;
-    positions.set(node.id, { x: x_pos, y: current_y });
+  const traverse = (node: GraphNode, y_pos: number, x_base: number): number => {
+    let current_x = x_base;
+    positions.set(node.id, { x: current_x, y: y_pos });
     
-    let childrenHeight = 0;
+    let childrenWidth = 0;
     node.children.forEach((child, index) => {
       if(index > 0) {
-        current_y += 120; // vertical spacing between sibling branches
+        current_x += 400; // horizontal spacing between sibling branches
       }
-      childrenHeight += traverse(child, x_pos + 400, current_y) - y_base;
+      childrenWidth += traverse(child, y_pos + 150, current_x) - x_base;
     });
 
-    return y_base + childrenHeight + (node.children.length === 0 ? 120 : 0);
+    return x_base + childrenWidth + (node.children.length === 0 ? 400 : 0);
   };
 
   nodes.forEach(node => {
-    y_offset = traverse(node, 50, y_offset);
+    x_offset = traverse(node, 50, x_offset);
   });
   
   return positions;
@@ -148,10 +148,10 @@ export function DiffGraph({ versions, onNodeClick }: DiffGraphProps) {
             return (
               <line
                 key={`${from.id}-${to.id}`}
-                x1={fromPos.x + 350}
-                y1={fromPos.y + 60}
-                x2={toPos.x}
-                y2={toPos.y + 60}
+                x1={fromPos.x + 175}
+                y1={fromPos.y + 112}
+                x2={toPos.x + 175}
+                y2={toPos.y}
                 stroke="hsl(var(--border))"
                 strokeWidth="2"
                 markerEnd="url(#arrow)"
