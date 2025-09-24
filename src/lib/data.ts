@@ -1,3 +1,4 @@
+
 import type { User, Document, Version, Task } from './types';
 
 export const users: User[] = [
@@ -110,57 +111,6 @@ const doc1_v3_bob = doc1_v1.replace('risk profile, societal impact, pace of deve
 const doc2_v0 = documents.find(d => d.id === 'doc2')!.content;
 const doc2_v1_charlie = doc2_v0.replace('examine', 'analyze');
 
-export const versions: Version[] = [
-  {
-    id: 'v1',
-    parentId: 'root',
-    documentId: 'doc1',
-    editor: users.find(u => u.id === '1')!, // Alice
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString(),
-    contentBefore: doc1_v0,
-    contentAfter: doc1_v1,
-    summary: 'Changed "first stage" to "initial phase".'
-  },
-  {
-    id: 'v2',
-    parentId: 'v1',
-    documentId: 'doc1',
-    editor: users.find(u => u.id === 'ai')!, // AI
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
-    contentBefore: doc1_v1,
-    contentAfter: doc1_v2_ai,
-    summary: 'Replaced "share similarities" with "have resemblances" for clarity.'
-  },
-  {
-    id: 'v3',
-    parentId: 'v1',
-    documentId: 'doc1',
-    editor: users.find(u => u.id === '2')!, // Bob
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 7).toISOString(),
-    contentBefore: doc1_v1,
-    contentAfter: doc1_v3_bob,
-    summary: 'Simplified the list of factors.'
-  },
-  {
-    id: 'v4',
-    parentId: 'root',
-    documentId: 'doc2',
-    editor: users.find(u => u.id === '3')!, // Charlie
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-    contentBefore: doc2_v0,
-    contentAfter: doc2_v1_charlie,
-    summary: 'Changed "examine" to "analyze".'
-  },
-  {
-    id: 'v5',
-    parentId: 'v3',
-    documentId: 'doc1',
-    editor: users.find(u => u.id === '1')!, // Alice
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
-    contentBefore: doc1_v3_bob,
-    contentAfter: doc1_v3_bob.replace('anchor later comparative analysis', 'support later analysis'),
-    summary: 'Shortened the last sentence.'
-  },
-];
+export const versions: Version[] = [];
 
 export const tasks: Task[] = [];

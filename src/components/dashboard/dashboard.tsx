@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SidebarProvider,
   Sidebar,
@@ -9,13 +10,50 @@ import {
 import { DocumentList } from "@/components/dashboard/document-list";
 import { DocumentEditor } from "@/components/dashboard/document-editor";
 import { DashboardHeader } from "@/components/dashboard/header";
-import { documents as initialDocuments } from "@/lib/data";
 import type { Document } from "@/lib/types";
 import { RightPanel } from "./right-panel";
+import { db } from "@/lib/firebase";
+import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
+import { documents as initialDocuments } from "@/lib/data";
+
 
 export function Dashboard() {
-  const [documents, setDocuments] = useState<Document[]>(initialDocuments);
-  const [activeDocument, setActiveDocument] = useState<Document>(documents[0]);
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [activeDocument, setActiveDocument] = useState<Document | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "documents"), (snapshot) => {
+      const docsFromFirestore = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Document));
+      
+      // A one-time operation to seed the database if it's empty
+      if (docsFromFirestore.length === 0) {
+        console.log("No documents found in Firestore, seeding with initial data...");
+        initialDocuments.forEach(async (d) => {
+          const { id, ...data } = d;
+          await db.collection('documents').doc(id).set(data);
+        });
+        setDocuments(initialDocuments);
+        setActiveDocument(initialDocuments[0]);
+        return;
+      }
+
+      setDocuments(docsFromFirestore);
+      
+      if (!activeDocument) {
+        setActiveDocument(docsFromFirestore[0]);
+      } else {
+        const updatedActiveDoc = docsFromFirestore.find(d => d.id === activeDocument.id);
+        if (updatedActiveDoc) {
+          setActiveDocument(updatedActiveDoc);
+        } else {
+          setActiveDocument(docsFromFirestore[0] || null);
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [activeDocument]);
+
 
   const handleSelectDocument = (docId: string) => {
     const selectedDoc = documents.find((doc) => doc.id === docId);
@@ -24,27 +62,27 @@ export function Dashboard() {
     }
   };
 
-  const handleUpdateDocument = (content: string) => {
-    setActiveDocument((prevDoc) => {
-      if (!prevDoc) return prevDoc;
-      const newDoc = { ...prevDoc, content, updatedAt: new Date().toISOString() };
-      setDocuments(docs => docs.map(d => d.id === newDoc.id ? newDoc : d));
-      return newDoc;
-    });
-  }
+  const handleUpdateDocument = async (content: string) => {
+    if (!activeDocument) return;
 
-  const handleToggleAILock = (docId: string) => {
-    setDocuments(docs => 
-      docs.map(doc => 
-        doc.id === docId ? { ...doc, aiLocked: !doc.aiLocked } : doc
-      )
-    );
-    // Also update active document if it's the one being changed
-    if (activeDocument?.id === docId) {
-      setActiveDocument(prev => prev ? {...prev, aiLocked: !prev.aiLocked} : prev);
-    }
+    const docRef = doc(db, "documents", activeDocument.id);
+    await updateDoc(docRef, { 
+      content,
+      updatedAt: new Date().toISOString() 
+    });
   };
 
+  const handleToggleAILock = async (docId: string) => {
+    const docToToggle = documents.find(doc => doc.id === docId);
+    if (!docToToggle) return;
+
+    const docRef = doc(db, "documents", docId);
+    await updateDoc(docRef, { aiLocked: !docToToggle.aiLocked });
+  };
+
+  if (!activeDocument) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <SidebarProvider>
