@@ -12,6 +12,7 @@ export type Document = {
   collaboratorIds: string[];
   createdAt: string;
   updatedAt: string;
+  aiLocked: boolean;
 };
 
 export type Version = {

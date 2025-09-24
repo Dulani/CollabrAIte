@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/sidebar";
 import { DocumentList } from "@/components/dashboard/document-list";
 import { DocumentEditor } from "@/components/dashboard/document-editor";
-import { RightPanel } from "@/components/dashboard/right-panel";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { documents as initialDocuments } from "@/lib/data";
 import type { Document } from "@/lib/types";
@@ -33,6 +32,19 @@ export function Dashboard() {
     });
   }
 
+  const handleToggleAILock = (docId: string) => {
+    setDocuments(docs => 
+      docs.map(doc => 
+        doc.id === docId ? { ...doc, aiLocked: !doc.aiLocked } : doc
+      )
+    );
+    // Also update active document if it's the one being changed
+    if (activeDocument?.id === docId) {
+      setActiveDocument(prev => prev ? {...prev, aiLocked: !prev.aiLocked} : prev);
+    }
+  };
+
+
   return (
     <SidebarProvider>
       <Sidebar>
@@ -40,6 +52,7 @@ export function Dashboard() {
           documents={documents}
           activeDocumentId={activeDocument.id}
           onSelectDocument={handleSelectDocument}
+          onToggleAILock={handleToggleAILock}
         />
       </Sidebar>
 
@@ -53,7 +66,6 @@ export function Dashboard() {
                 document={activeDocument}
                 onContentChange={handleUpdateDocument}
               />
-              <RightPanel document={activeDocument} />
             </div>
           </div>
         </SidebarInset>

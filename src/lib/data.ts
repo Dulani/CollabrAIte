@@ -17,6 +17,7 @@ export const documents: Document[] = [
     collaboratorIds: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    aiLocked: false,
   },
   {
     id: 'doc2',
@@ -26,6 +27,7 @@ export const documents: Document[] = [
     collaboratorIds: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    aiLocked: false,
   },
   {
     id: 'doc3',
@@ -35,6 +37,7 @@ export const documents: Document[] = [
     collaboratorIds: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    aiLocked: false,
   },
   {
     id: 'doc4',
@@ -44,6 +47,7 @@ export const documents: Document[] = [
     collaboratorIds: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    aiLocked: false,
   },
   {
     id: 'doc5',
@@ -53,6 +57,7 @@ export const documents: Document[] = [
     collaboratorIds: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    aiLocked: false,
   },
   {
     id: 'doc6',
@@ -62,6 +67,7 @@ export const documents: Document[] = [
     collaboratorIds: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    aiLocked: false,
   },
   {
     id: 'doc7',
@@ -71,6 +77,7 @@ export const documents: Document[] = [
     collaboratorIds: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    aiLocked: false,
   },
   {
     id: 'doc8',
@@ -80,6 +87,7 @@ export const documents: Document[] = [
     collaboratorIds: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    aiLocked: false,
   },
   {
     id: 'doc9',
@@ -89,8 +97,10 @@ export const documents: Document[] = [
     collaboratorIds: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    aiLocked: false,
   },
 ];
+
 
 export const versions: Version[] = [];
 export const tasks: Task[] = [];

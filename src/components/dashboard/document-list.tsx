@@ -14,7 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { File, Plus, Settings, Sparkles, LogOut } from "lucide-react";
+import { File, Plus, Settings, Sparkles, LogOut, Lock, Unlock } from "lucide-react";
 import type { Document } from "@/lib/types";
 import { users } from "@/lib/data";
 
@@ -22,6 +22,7 @@ interface DocumentListProps {
   documents: Document[];
   activeDocumentId: string;
   onSelectDocument: (docId: string) => void;
+  onToggleAILock: (docId: string) => void;
 }
 
 const currentUser = users[0];
@@ -30,6 +31,7 @@ export function DocumentList({
   documents,
   activeDocumentId,
   onSelectDocument,
+  onToggleAILock,
 }: DocumentListProps) {
   return (
     <>
@@ -53,15 +55,27 @@ export function DocumentList({
           </SidebarGroupLabel>
           <SidebarMenu>
             {documents.map((doc) => (
-              <SidebarMenuItem key={doc.id}>
+              <SidebarMenuItem key={doc.id} className="flex items-center justify-between pr-2">
                 <SidebarMenuButton
                   onClick={() => onSelectDocument(doc.id)}
                   isActive={doc.id === activeDocumentId}
-                  className="truncate"
+                  className="truncate flex-1"
                 >
                   <File className="h-4 w-4" />
                   <span>{doc.title}</span>
                 </SidebarMenuButton>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 shrink-0"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onToggleAILock(doc.id);
+                    }}
+                    title={doc.aiLocked ? "Unlock AI changes" : "Lock AI changes"}
+                  >
+                    {doc.aiLocked ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
+                  </Button>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
