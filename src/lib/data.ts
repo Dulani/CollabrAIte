@@ -11,118 +11,86 @@ export const users: User[] = [
 export const documents: Document[] = [
   {
     id: 'doc1',
-    title: 'Project Phoenix: Q3 Strategy',
-    content: `Project Phoenix: Q3 Strategy
-
-Introduction
-This document outlines the strategic initiatives for Project Phoenix for the third quarter. Our primary focus is on market expansion and product innovation.
-
-1. Market Expansion
-- Target new demographic in the APAC region.
-- Launch localized marketing campaigns.
-- Establish partnerships with regional distributors.
-
-2. Product Innovation
-- Develop and integrate AI-powered features.
-- Enhance user interface based on feedback from Q2.
-- Begin R&D for version 3.0.
-
-3. Financial Projections
-- [Placeholder for financial data]
-
-Conclusion
-By focusing on these key areas, we aim to achieve a 20% growth in user acquisition and a 15% increase in revenue for Q3.`,
+    title: 'Step 1: Identify Relevant Historical Analogues',
+    content: `The first stage is to select past technologies whose governance challenges share similarities with the target technology in question. These analogues should be chosen based on factors like risk profile, societal impact, pace of development, and geopolitical context. Gather background information, timelines, and a clear mapping of stakeholders to anchor later comparative analysis.`,
     ownerId: '1',
-    collaboratorIds: ['2', '3'],
-    createdAt: '2024-07-28T10:00:00Z',
-    updatedAt: '2024-07-29T14:30:00Z',
+    collaboratorIds: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
   {
     id: 'doc2',
-    title: 'Team Onboarding Manual',
-    content: `Welcome to the team! This manual will guide you through the onboarding process.`,
-    ownerId: '2',
-    collaboratorIds: ['1'],
-    createdAt: '2024-07-25T09:00:00Z',
-    updatedAt: '2024-07-25T09:00:00Z',
+    title: 'Step 2: Map Past Governance Mechanisms',
+    content: `Once the analogues are identified, examine the specific governance tools and methods that were applied to manage them. This can include international treaties and organizations, national legislation, industry self-regulation, hybrid public-private frameworks, and enforcement models. The aim is to catalogue these measures in a structured way that makes them comparable across cases.`,
+    ownerId: '1',
+    collaboratorIds: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
   {
     id: 'doc3',
-    title: 'Meeting Notes - 2024-07-22',
-    content: `Attendees: Alice, Bob. Discussion points: Q3 roadmap, budget allocation.`,
+    title: 'Step 3: Extract Transferable Principles',
+    content: `From the governance mechanisms, distill the core principles and strategies that could be adapted to your target technology. These may include norm-setting processes, stakeholder coordination structures, technical safeguards, and approaches to risk tiering. Focus on understanding why these principles worked (or failed) in their original context so you can assess their applicability.`,
     ownerId: '1',
-    collaboratorIds: ['2'],
-    createdAt: '2024-07-22T11:00:00Z',
-    updatedAt: '2024-07-22T11:45:00Z',
-  },
-];
-
-export const versions: Version[] = [
-    {
-        id: 'v1',
-        documentId: 'doc1',
-        editor: users.find(u => u.id === '2')!,
-        timestamp: '2024-07-29T11:05:00Z',
-        summary: 'Added details to market expansion section.',
-        contentBefore: `1. Market Expansion
-- Target new demographic.
-- Launch marketing campaigns.`,
-        contentAfter: `1. Market Expansion
-- Target new demographic in the APAC region.
-- Launch localized marketing campaigns.
-- Establish partnerships with regional distributors.`
-    },
-    {
-        id: 'v2',
-        documentId: 'doc1',
-        editor: users.find(u => u.id === 'ai')!,
-        timestamp: '2024-07-29T12:20:00Z',
-        summary: 'Reworded introduction for clarity and impact.',
-        contentBefore: `Introduction
-This document is for Project Phoenix for the third quarter.`,
-        contentAfter: `Introduction
-This document outlines the strategic initiatives for Project Phoenix for the third quarter. Our primary focus is on market expansion and product innovation.`
-    },
-    {
-        id: 'v3',
-        documentId: 'doc1',
-        editor: users.find(u => u.id === '3')!,
-        timestamp: '2024-07-29T14:30:00Z',
-        summary: 'Added R&D point to product innovation.',
-        contentBefore: `2. Product Innovation
-- Develop and integrate AI-powered features.
-- Enhance user interface based on feedback from Q2.`,
-        contentAfter: `2. Product Innovation
-- Develop and integrate AI-powered features.
-- Enhance user interface based on feedback from Q2.
-- Begin R&D for version 3.0.`
-    }
-];
-
-
-export const tasks: Task[] = [
-  {
-    id: 'task1',
-    documentId: 'doc1',
-    title: 'Flesh out financial projections',
-    description: 'Please add the estimated budget and revenue forecasts for the APAC expansion.',
-    assignee: users.find(u => u.id === '3')!,
-    status: 'In Progress',
+    collaboratorIds: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
   {
-    id: 'task2',
-    documentId: 'doc1',
-    title: 'Review product innovation section',
-    description: 'Check if the AI features listed are feasible within the Q3 timeframe.',
-    assignee: users.find(u => u.id === '2')!,
-    status: 'To Do',
+    id: 'doc4',
+    title: 'Step 4: Apply to Scenario Modelling',
+    content: `Develop plausible future scenarios for your target technology—such as high-risk, low-risk, and internationally fragmented contexts—and embed the extracted governance principles into each scenario. Evaluate how well they fit, their potential impact, and any weaknesses or unintended effects. This step bridges historical insight with forward-looking policy thinking.`,
+    ownerId: '1',
+    collaboratorIds: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
-   {
-    id: 'task3',
-    documentId: 'doc1',
-    title: 'Finalize Q3 Strategy',
-    description: 'Perform a final review of the entire document for clarity, consistency, and completeness.',
-    assignee: users.find(u => u.id === '1')!,
-    status: 'To Do',
+  {
+    id: 'doc5',
+    title: 'Step 5: Perform Comparative Analysis',
+    content: `Bring together the insights from multiple analogues and scenarios to identify recurring patterns, common success factors, and systematic weaknesses. Equally important, flag the limits of analogy—situations where differences in technology or context mean a governance approach will not translate effectively. This step sets the foundation for a unified strategic picture.`,
+    ownerId: '1',
+    collaboratorIds: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'doc6',
+    title: 'Step 6: Develop Recommendations',
+    content: `Translate the comparative insights into a set of actionable governance proposals tailored to the target technology. These should balance innovation incentives with safety requirements, and include both short-term and long-term strategies. Recommendations should also specify measurable criteria for success, as well as clear responsible actors for implementation.`,
+    ownerId: '1',
+    collaboratorIds: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'doc7',
+    title: 'Step 7: Synthesize and Harmonize',
+    content: `Integrate all findings, analyses, and recommendations into a coherent, well-structured document that is accessible to the intended audience. Ensure consistency in definitions, terminology, and tone across sections. Include an executive summary or policy brief to facilitate rapid understanding by decision-makers.`,
+    ownerId: '1',
+    collaboratorIds: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'doc8',
+    title: 'Step 8: Quality Assurance and Validation',
+    content: `Before finalizing the work, conduct a thorough validation process. This includes fact-checking historical references, verifying the plausibility of scenarios, and stress-testing recommendations for real-world feasibility. Seek feedback from domain experts and revise based on their critique to ensure high reliability and credibility.`,
+    ownerId: '1',
+    collaboratorIds: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'doc9',
+    title: 'Meta Step 9: Iteration and Refinement Loop',
+    content: `Treat the process as cyclical rather than linear. If quality checks, expert feedback, or new data reveal gaps, outdated assumptions, or promising unexplored angles, return to the relevant earlier step(s) and refine the work. This loop ensures that the research remains adaptive to evolving technology landscapes, stakeholder input, and emerging risks over time.`,
+    ownerId: '1',
+    collaboratorIds: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
 ];
+
+export const versions: Version[] = [];
+export const tasks: Task[] = [];
