@@ -10,14 +10,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { diffChars } from "diff";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { DiffView } from "@/components/dashboard/diff-view";
 
 interface DiffGraphProps {
   versions: Version[];
@@ -30,20 +30,8 @@ interface GraphNode {
   level: number;
 }
 
-const DiffSegment = ({ part }: { part: ReturnType<typeof diffChars>[0] }) => {
-  const baseStyle = "px-1 py-0.5 rounded";
-  if (part.added) {
-    return <span className={`bg-green-500/20 text-green-200 ${baseStyle}`}>{part.value}</span>;
-  }
-  if (part.removed) {
-    return <span className={`bg-red-500/20 text-red-200 line-through ${baseStyle}`}>{part.value}</span>;
-  }
-  return <span className="opacity-70">{part.value}</span>;
-};
-
 const VersionNode = ({ node, x, y }: { node: GraphNode; x: number; y: number }) => {
   const version = node.version;
-  const diff = diffChars(version.contentBefore, version.contentAfter);
 
   return (
     <div
@@ -54,10 +42,9 @@ const VersionNode = ({ node, x, y }: { node: GraphNode; x: number; y: number }) 
         width: 350,
       }}
     >
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Card className="hover:border-primary/50 transition-colors">
+      <Dialog>
+        <DialogTrigger asChild>
+            <Card className="hover:border-primary/50 transition-colors cursor-pointer">
               <CardHeader className="flex flex-row items-center gap-4 p-3">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={version.editor.avatarUrl} />
@@ -74,22 +61,22 @@ const VersionNode = ({ node, x, y }: { node: GraphNode; x: number; y: number }) 
                   </CardDescription>
                 </div>
               </CardHeader>
+              <CardContent className="p-3 pt-0">
+                <p className="text-xs italic text-muted-foreground truncate">"{version.summary}"</p>
+              </CardContent>
             </Card>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" align="start" className="max-w-md bg-background border-primary">
-            <div className="p-2">
-                <h4 className="font-bold mb-2">Change Summary:</h4>
-                <p className="text-sm italic mb-4">"{version.summary}"</p>
-                <h4 className="font-bold mb-2">Diff:</h4>
-                <pre className="text-xs whitespace-pre-wrap font-sans bg-muted p-2 rounded-md">
-                    {diff.map((part, index) => (
-                        <DiffSegment key={index} part={part} />
-                    ))}
-                </pre>
-            </div>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+        </DialogTrigger>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Comparing Changes</DialogTitle>
+            <CardDescription>{version.summary}</CardDescription>
+          </DialogHeader>
+          <DiffView
+            before={version.contentBefore}
+            after={version.contentAfter}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
@@ -181,9 +168,9 @@ export function DiffGraph({ versions }: DiffGraphProps) {
               <line
                 key={`${from.id}-${to.id}`}
                 x1={fromPos.x + 350}
-                y1={fromPos.y + 45}
+                y1={fromPos.y + 60}
                 x2={toPos.x}
-                y2={toPos.y + 45}
+                y2={toPos.y + 60}
                 stroke="hsl(var(--border))"
                 strokeWidth="2"
                 markerEnd="url(#arrow)"
