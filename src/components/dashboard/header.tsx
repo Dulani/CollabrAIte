@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import type { Document as DocumentType, User } from "@/lib/types";
 import { users } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -25,6 +25,11 @@ const getCollaborators = (doc: DocumentType): User[] => {
 
 export function DashboardHeader({ document }: DashboardHeaderProps) {
   const collaborators = getCollaborators(document);
+  const [updatedAt, setUpdatedAt] = useState("");
+
+  useEffect(() => {
+    setUpdatedAt(new Date(document.updatedAt).toLocaleString());
+  }, [document.updatedAt]);
 
   return (
     <header className="p-4 bg-card rounded-t-xl border-b">
@@ -32,7 +37,7 @@ export function DashboardHeader({ document }: DashboardHeaderProps) {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{document.title}</h1>
           <p className="text-sm text-muted-foreground">
-            Last updated: {new Date(document.updatedAt).toLocaleString()}
+            Last updated: {updatedAt}
           </p>
         </div>
         <div className="flex items-center gap-2">
