@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useMemo } from "react";
@@ -10,17 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { DiffView } from "@/components/dashboard/diff-view";
 
 interface DiffGraphProps {
   versions: Version[];
+  onNodeClick: (version: Version) => void;
 }
 
 interface GraphNode {
@@ -30,7 +24,7 @@ interface GraphNode {
   level: number;
 }
 
-const VersionNode = ({ node, x, y }: { node: GraphNode; x: number; y: number }) => {
+const VersionNode = ({ node, x, y, onClick }: { node: GraphNode; x: number; y: number; onClick: (version: Version) => void; }) => {
   const version = node.version;
 
   return (
@@ -41,42 +35,29 @@ const VersionNode = ({ node, x, y }: { node: GraphNode; x: number; y: number }) 
         top: y,
         width: 350,
       }}
+      onClick={() => onClick(version)}
     >
-      <Dialog>
-        <DialogTrigger asChild>
-            <Card className="hover:border-primary/50 transition-colors cursor-pointer">
-              <CardHeader className="flex flex-row items-center gap-4 p-3">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={version.editor.avatarUrl} />
-                  <AvatarFallback>
-                    {version.editor.name.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <CardTitle className="text-sm font-medium leading-none">
-                    {version.editor.name}
-                  </CardTitle>
-                  <CardDescription className="text-xs">
-                    {new Date(version.timestamp).toLocaleString()}
-                  </CardDescription>
-                </div>
-              </CardHeader>
-              <CardContent className="p-3 pt-0">
-                <p className="text-xs italic text-muted-foreground truncate">"{version.summary}"</p>
-              </CardContent>
-            </Card>
-        </DialogTrigger>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>Comparing Changes</DialogTitle>
-            <CardDescription>{version.summary}</CardDescription>
-          </DialogHeader>
-          <DiffView
-            before={version.contentBefore}
-            after={version.contentAfter}
-          />
-        </DialogContent>
-      </Dialog>
+        <Card className="hover:border-primary/50 transition-colors cursor-pointer">
+          <CardHeader className="flex flex-row items-center gap-4 p-3">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={version.editor.avatarUrl} />
+              <AvatarFallback>
+                {version.editor.name.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <CardTitle className="text-sm font-medium leading-none">
+                {version.editor.name}
+              </CardTitle>
+              <CardDescription className="text-xs">
+                {new Date(version.timestamp).toLocaleString()}
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="p-3 pt-0">
+            <p className="text-xs italic text-muted-foreground truncate">"{version.summary}"</p>
+          </CardContent>
+        </Card>
     </div>
   );
 };
@@ -132,7 +113,7 @@ const calculatePositions = (nodes: GraphNode[]) => {
   return positions;
 };
 
-export function DiffGraph({ versions }: DiffGraphProps) {
+export function DiffGraph({ versions, onNodeClick }: DiffGraphProps) {
   const graphTree = useMemo(() => buildTree(versions), [versions]);
   const positions = useMemo(() => calculatePositions(graphTree), [graphTree]);
 
@@ -182,7 +163,7 @@ export function DiffGraph({ versions }: DiffGraphProps) {
       {allNodes.map((node) => {
         const pos = positions.get(node.id);
         if(!pos) return null;
-        return <VersionNode key={node.id} node={node} x={pos.x} y={pos.y} />;
+        return <VersionNode key={node.id} node={node} x={pos.x} y={pos.y} onClick={onNodeClick} />;
       })}
        {versions.length === 0 && (
           <div className="flex items-center justify-center h-full">

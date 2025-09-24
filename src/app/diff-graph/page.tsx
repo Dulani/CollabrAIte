@@ -1,3 +1,4 @@
+
 import { DiffGraphView } from "@/components/diff-graph/diff-graph-view";
 import { documents, versions } from "@/lib/data";
 
@@ -12,7 +13,7 @@ export default function DiffGraphPage() {
           Visualizing the evolution of documents and contributions.
         </p>
       </header>
-      <main className="flex-1 p-4 md:p-6">
+      <main className="flex-1 p-4 md:p-6 overflow-auto">
         <DiffGraphView documents={documents} allVersions={versions} />
       </main>
     </div>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo } from "react";
@@ -12,6 +13,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DiffGraph } from "./diff-graph";
+import { DiffView } from "@/components/dashboard/diff-view";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface DiffGraphViewProps {
   documents: Document[];
@@ -24,18 +33,29 @@ export function DiffGraphView({
 }: DiffGraphViewProps) {
   const [isConcatenated, setIsConcatenated] = useState(false);
   const [selectedDocId, setSelectedDocId] = useState("all");
+  const [selectedVersion, setSelectedVersion] = useState<Version | null>(null);
 
   const versions = useMemo(() => {
     if (isConcatenated) {
-        // Simple concatenation for now. A more robust implementation might handle merges.
-        const combinedDocId = documents.map(d => d.id).join('+');
-        return allVersions.map(v => ({...v, documentId: combinedDocId, parentId: v.parentId === 'root' ? 'root' : `concat-${v.parentId}` }));
+      const combinedDocId = documents.map((d) => d.id).join("+");
+      return allVersions.map((v) => ({
+        ...v,
+        documentId: combinedDocId,
+        parentId: v.parentId === "root" ? "root" : `concat-${v.parentId}`,
+      }));
     }
     if (selectedDocId === "all") {
       return allVersions;
     }
     return allVersions.filter((v) => v.documentId === selectedDocId);
   }, [selectedDocId, allVersions, isConcatenated, documents]);
+
+  // When versions change, clear the selected version if it's no longer in the list
+  React.useEffect(() => {
+    if (selectedVersion && !versions.find(v => v.id === selectedVersion.id)) {
+      setSelectedVersion(null);
+    }
+  }, [versions, selectedVersion]);
 
   return (
     <div className="space-y-6">
@@ -68,9 +88,23 @@ export function DiffGraphView({
           </Select>
         </div>
       </div>
-      <div className="w-full h-[calc(100vh-20rem)] p-4 border rounded-lg bg-card shadow-sm overflow-auto">
-        <DiffGraph versions={versions} />
+      <div className="w-full h-[calc(100vh-25rem)] p-4 border rounded-lg bg-card shadow-sm overflow-auto">
+        <DiffGraph versions={versions} onNodeClick={setSelectedVersion} />
       </div>
+      {selectedVersion && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Comparing Changes</CardTitle>
+            <CardDescription>{selectedVersion.summary}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DiffView
+              before={selectedVersion.contentBefore}
+              after={selectedVersion.contentAfter}
+            />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
