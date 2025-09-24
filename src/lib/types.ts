@@ -17,6 +17,7 @@ export type Document = {
 
 export type Version = {
   id: string;
+  parentId: string; // ID of the parent version, 'root' for initial commits
   documentId: string;
   editor: User;
   timestamp: string;

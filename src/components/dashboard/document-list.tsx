@@ -14,9 +14,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { File, Plus, Settings, Sparkles, LogOut, Lock, Unlock } from "lucide-react";
+import { File, Plus, Settings, Sparkles, LogOut, Lock, Unlock, GitMerge } from "lucide-react";
 import type { Document } from "@/lib/types";
 import { users } from "@/lib/data";
+import Link from "next/link";
 
 interface DocumentListProps {
   documents: Document[];
@@ -78,6 +79,19 @@ export function DocumentList({
                   </Button>
               </SidebarMenuItem>
             ))}
+          </SidebarMenu>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Analysis</SidebarGroupLabel>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <Link href="/diff-graph" className="w-full">
+                <SidebarMenuButton>
+                    <GitMerge className="h-4 w-4" />
+                    <span>Diff Graph</span>
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>

@@ -11,6 +11,7 @@ import { DocumentEditor } from "@/components/dashboard/document-editor";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { documents as initialDocuments } from "@/lib/data";
 import type { Document } from "@/lib/types";
+import { RightPanel } from "./right-panel";
 
 export function Dashboard() {
   const [documents, setDocuments] = useState<Document[]>(initialDocuments);
@@ -66,6 +67,7 @@ export function Dashboard() {
                 document={activeDocument}
                 onContentChange={handleUpdateDocument}
               />
+              <RightPanel document={activeDocument} />
             </div>
           </div>
         </SidebarInset>
