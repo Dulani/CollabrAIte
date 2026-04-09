@@ -2,6 +2,8 @@
 
 CollabrAIte is a modern, collaborative document editing platform designed to streamline the writing and review process. It leverages AI to provide intelligent suggestions and features a unique version control system that visualizes the evolution of a document.
 
+Original prompt: I want to make a new app that allows collaborative editing of text with multiple users (multiple logins). I want one of the users to be an LLM (maybe more than one). Each user would have their own view of the text and a task. They'd submit their "response" (preferred text) and that submitted text woudl be stored as a doc in firebase, shown as a diff to all users, and eventually integrated into the larger task/text by an LLM (but, the app would retain a full history (in graph edit format) for rollback, diffs, etc.)
+
 ## Features
 
 - **Structured Document Editing**: Work on documents within a guided, step-by-step workflow.
